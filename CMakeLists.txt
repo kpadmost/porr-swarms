@@ -3,4 +3,4 @@ project(porr_swarms)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(porr_swarms main.cpp)
+add_executable(porr_swarms main.cpp fa-sequential/FireflyAlgorithm.cpp fa-sequential/FireflyAlgorithm.h)

@@ -5,9 +5,15 @@
 #ifndef PORR_SWARMS_GLOWWORMSWARM_H
 #define PORR_SWARMS_GLOWWORMSWARM_H
 
+#include "Glowworm.h"
+
 namespace gso {
     class GlowwormSwarm {
     private:
+        // members
+        std::vector<Glowworm> population;
+        const Parameters parameters;
+
         // main steps
         void movement(); // move glowworms
         void updateLuciferine(); // update luciferine
@@ -16,7 +22,7 @@ namespace gso {
     public:
         void runAlgorithm();
 
-        GlowwormSwarm();
+        GlowwormSwarm(std::function<float(Position)> function) : parameters(function) { }
     };
 }
 

@@ -4,4 +4,3 @@
 
 #include "GlowwormSwarm.h"
 
-gso::GlowwormSwarm::GlowwormSwarm() {}

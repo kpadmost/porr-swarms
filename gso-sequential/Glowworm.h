@@ -9,17 +9,24 @@
 #include <vector>
 #include "Parameters.hpp"
 
+
 namespace gso {
+    class GlowwormPopulation;
     class Glowworm {
+        friend class GlowwormPopulation;
     private:
         // global algorithm parameters, mostly constants thoughout algorithm
-        std::shared_ptr<Parameters> pParameters;
+
         // specific per glowworm
         Position position;
         float neighbourhoodRange;
         float luciferin;
+
+
+        float distance(const Glowworm&) const;
     public:
         void updateLuciferin();
+        void move(const std::vector<const Glowworm>& population); // WARNING! even though we are passing the one
     };
 
 }

@@ -8,25 +8,26 @@
 #include <memory>
 #include <vector>
 #include "Parameters.hpp"
+#include "Random.hpp"
 
 
 namespace gso {
-    class GlowwormPopulation;
+    class GlowwormSwarm;
     class Glowworm {
-        friend class GlowwormPopulation;
+        friend class GlowwormSwarm;
     private:
-        // global algorithm parameters, mostly constants thoughout algorithm
-
-        // specific per glowworm
         Position position;
         float neighbourhoodRange;
         float luciferin;
 
-
         float distance(const Glowworm&) const;
+        void moveTowardsWorm(const Glowworm&, float step);
+
+        void initializePosition(const size_t m);
     public:
-        void updateLuciferin();
-        void move(const std::vector<const Glowworm>& population); // WARNING! even though we are passing the one
+        Glowworm(const size_t m, const float l0, const float rs) : luciferin(l0), neighbourhoodRange(rs) {
+            initializePosition(m);
+        }
     };
 
 }

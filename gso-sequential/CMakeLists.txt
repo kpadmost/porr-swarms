@@ -1,21 +1,19 @@
 cmake_minimum_required(VERSION 3.10)
 project(glowworm_swarms)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
 
 set(HEADERS
         Glowworm.h
         GlowwormSwarm.h
-        Parameters.hpp
-        GlowwormPopulation.h
-)
+        Random.hpp)
 
 set(SOURCES
         Glowworm.cc
         GlowwormSwarm.cc
-        GlowwormPopulation.cc
-)
+        Parameters.hpp
+        )
 
 
 

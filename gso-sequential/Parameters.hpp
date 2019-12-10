@@ -4,11 +4,12 @@
 #include <functional>
 #include <vector>
 
+
 typedef std::vector<float> Position;
 
 class Parameters { // algorithm parameters
 private:
-    unsigned int t; // time
+    unsigned int t = 0; // time
 public:
     unsigned int getT() const {
         return t;
@@ -17,23 +18,34 @@ public:
     inline void updateT() { t++; }
 
 public:
-    const float ro;
-    const float gamma;
-    const float beta;
-    const int neighbours;
-    const int l0;
-    const float s;
+
+
+    const float rs;
+    const int maxT;
+    const size_t populationNumber;
+    const unsigned int dimensions;
+    // empirically best from the book
+    const int nt = 5;
+    const int l0 = 5;
+    const float s = 0.03f;
+    const float ro = 0.4f;
+    const float gamma = 0.6f;
+    const float beta = 0.08f;
 
     const std::function<float(const Position&)> consFunction;
 
-    Parameters(const float ro, const float gamma, const float beta, const int neighbours, const int l0,
-               const std::function<float(const Position&)> &consFunction) : ro(ro), gamma(gamma), beta(beta),
-                                                                            neighbours(neighbours), l0(l0),
-                                                                            consFunction(consFunction), t(0), s(0) {}
+    Parameters(const std::function<float(const Position&)> &consFunction, unsigned int iterationNumber, float rs,
+               const size_t populationNumber, unsigned int dimensions,
+               const float ro, const float gamma, const float beta, const float s, const int neighbours, const int l0
+    ) : ro(ro), gamma(gamma), beta(beta), nt(neighbours), l0(l0), consFunction(consFunction), t(0), s(s),
+        maxT(iterationNumber), rs(rs), populationNumber(populationNumber), dimensions(dimensions) {}
 
-    Parameters(const std::function<float(const Position &)> &consFunction) : consFunction(consFunction), ro(0.4f), // parameters from paper
-                                                                                gamma(0.6f), beta(0.08f), neighbours(5),
-                                                                                s(0.03), l0(5), t(0) {}
+    Parameters(
+            const std::function<float(const Position &)> &consFunction,
+            unsigned int iterationNumber, float rs, size_t populationNumber, unsigned int dimensions
+    ) // parameters from paper
+            : consFunction(consFunction), t(0), maxT(iterationNumber),
+              rs(rs), populationNumber(populationNumber), dimensions(dimensions) {}
 };
 
 #endif

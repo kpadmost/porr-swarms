@@ -5,25 +5,38 @@
 #ifndef PORR_SWARMS_GLOWWORMSWARM_H
 #define PORR_SWARMS_GLOWWORMSWARM_H
 
+
+#include <cmath>
+#include <iostream>
+
+#include "Random.hpp"
 #include "Glowworm.h"
+using namespace std;
 
 namespace gso {
     class GlowwormSwarm {
     private:
         // members
         std::vector<Glowworm> population;
-        const Parameters parameters;
+        Parameters parameters;
 
         // main steps
-        void movement(); // move glowworms
+        void movePopulation(); // move glowworms
         void updateLuciferine(); // update luciferine
-        void neighbourhoodRangeUpdate();
+        void neighbourhoodRangeUpdate(Glowworm& worm, const size_t neighboursNumber);
 
+        unsigned int selectWormFromProbability(const std::vector<double>& probabilities);
+        void initializeAlgorithm();
     public:
         void runAlgorithm();
-
-        GlowwormSwarm(std::function<float(Position)> function) : parameters(function) { }
+        Position getBestWorm();
+        GlowwormSwarm(
+                const std::function<float(const Position&)> &function,
+                unsigned int iterationNumber, float rs, size_t populationN, unsigned int dimensions
+        ) : parameters(function, iterationNumber, rs, populationN,dimensions) { }
     };
+
+
 }
 
 #endif //PORR_SWARMS_GLOWWORMSWARM_H

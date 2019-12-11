@@ -1,5 +1,5 @@
 #include <iostream>
-#include "fa-sequential/FireflyAlgorithm.h"
+#include "FireflyAlgorithm.h"
 
 using namespace std;
 

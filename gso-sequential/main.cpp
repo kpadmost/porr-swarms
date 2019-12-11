@@ -6,7 +6,7 @@
 #include "GlowwormSwarm.h"
 using namespace std;
 
-float myCostFunction(const Position& pos) {
+float zad1(const Position& pos) {
     const float a1 = accumulate(pos.begin(), pos.end(), 0.0f, [] (const float i, const float &xi) { return i + xi * xi;});
 
     size_t i = 1;
@@ -20,16 +20,8 @@ float myCostFunction(const Position& pos) {
 }
 
 int main() {
-    cout << "Hello, World!" << std::endl;
-    gso::GlowwormSwarm swarm(myCostFunction, 500, 7.0f, 90, 2);
+    gso::GlowwormSwarm swarm(zad1, 500, 7.0f, 90, 2);
     swarm.runAlgorithm();
-    //Firefly algorithm
-    // set parameters
-
-    //Sequential run
-    // attractivityFactor (recommended values: 0.5 - 4), absorptionFactor (recommended values: 1e-9 - 1e-3)
-
-
-
+    Position best = swarm.getBestWorm();
     return 0;
 }

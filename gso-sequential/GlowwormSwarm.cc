@@ -23,7 +23,6 @@ void gso::GlowwormSwarm::movePopulation() {
         for(auto oWorm = population.begin(); oWorm != population.end(); oWorm++)
             if(worm->distance(*oWorm) < worm->neighbourhoodRange && worm->luciferin < oWorm->luciferin)
                 neighbours.push_back(*oWorm);
-        //cout << "here5" << endl;
         // calculate probabilities
         if(neighbours.empty())
             continue;
@@ -31,16 +30,12 @@ void gso::GlowwormSwarm::movePopulation() {
         double denominator = 0.0;
         for(auto oWorm = neighbours.begin(); oWorm != neighbours.end(); oWorm++)
             denominator += oWorm->luciferin - worm->luciferin;
-        //cout << "here6" << endl;
         for(unsigned int i = 0; i < neighbours.size(); i++)
             probabilities[i] = (neighbours[i].luciferin - worm->luciferin) / denominator;
-        //cout << "here7" << endl;
         // select worm based on probabilities
 
         const size_t wormIndex = selectWormFromProbability(probabilities);
-        //cout << "here7.5" << endl;
         gso::Glowworm& chosenWorm = neighbours[wormIndex];
-        //cout << "here8" << endl;
         // move towards that worm
         worm->moveTowardsWorm(chosenWorm, parameters.s);
 
@@ -54,7 +49,6 @@ unsigned int gso::GlowwormSwarm::selectWormFromProbability(const std::vector<dou
     if(probabilities.size() == 1)
         return 0;
     std::vector<double> accumulatedProbabilities(probabilities.size(), 0.0);
-    //cout << "here7.6 "<< probabilities.size()  << endl;
     accumulatedProbabilities[0] = probabilities[0];
     for(size_t i = 1; i < probabilities.size(); i++)
         accumulatedProbabilities[i] = accumulatedProbabilities[i - 1] + probabilities[i];
@@ -63,31 +57,25 @@ unsigned int gso::GlowwormSwarm::selectWormFromProbability(const std::vector<dou
     // binary search
     int l = 0, h = accumulatedProbabilities.size() - 1, mid = (h + l) / 2;
     while(l <= h && h >= 0) {
-        //cout << l << " " << h << " " << mid << " ";
         if(accumulatedProbabilities[mid] < p)
             l = mid + 1;
         else
             h = mid - 1;
         mid = (l + h) / 2;
     }
-    //cout << endl;
     return mid + 1;
 }
 
 void gso::GlowwormSwarm::runAlgorithm() {
     initializeAlgorithm();
-    //cout << "here1";
     auto bp = getBestWorm();
     std::cout << "Iteration " << parameters.getT() << " cf " << parameters.consFunction(bp) << std::endl;
     std::for_each(bp.begin(), bp.end(), [] (const auto &d) {std::cout << d << " ";});
     std::cout << std::endl;
     while(parameters.getT() < parameters.maxT) {
         updateLuciferine();
-        //cout << "here2";
         movePopulation();
-        //cout << "here3";
         parameters.updateT();
-        //cout << "here4";
         auto bp = getBestWorm();
         std::cout << "Iteration " << parameters.getT() << " cf " << parameters.consFunction(bp) << " ";
         std::for_each(bp.begin(), bp.end(), [] (const auto &d) {std::cout << d << " ";});

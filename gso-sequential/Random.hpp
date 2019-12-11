@@ -12,7 +12,7 @@ namespace gso {
     class Random {
      public:
         inline static T getFromRange(T l, T h) {
-            std::random_device rd;
+            std::random_device rd; // TODO: make instance
             std::mt19937 gen(rd());
             std::uniform_real_distribution<T> dis(l, h);
             return dis(gen);

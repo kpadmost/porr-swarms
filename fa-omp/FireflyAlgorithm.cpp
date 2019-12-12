@@ -13,6 +13,7 @@ FireflyAlgorithm::FireflyAlgorithm(int _numberOfFireflies, int _numberOfDimensio
         : numberOfFireflies(_numberOfFireflies), numberOfDimensions(_numberOfDimensions), dimensionRange(_dimensionRange), attractivityFactor(_attractivityFactor),
           absorptionFactor(_absorptionFactor){
     this->debugMode;
+
     InitializeFirefliesTable(this->firefliesTable, _numberOfFireflies, _numberOfDimensions);
     InitializeFirefliesTable(this->firefliesTableTemporary, _numberOfFireflies, _dimensionRange);
     GenerateRandomPositionsOfFireflies();
@@ -80,8 +81,13 @@ void FireflyAlgorithm::RunAlgorithm(int numberOfIterations, bool _debugMode) {
     srand(time(NULL));
     //float *fireflyMoveVector = new float[this->dimensionRange];
     for (int iterationNo = 0; iterationNo < numberOfIterations; iterationNo++) {
-        if(this->debugMode)
+        if (this->debugMode)
             std::cout << "Iteration no. " << iterationNo << std::endl;
+
+
+    # pragma omp parallel num_threads (8)
+        {
+    # pragma omp for lastprivate ( i )
 
         for (int i = 0; i < numberOfFireflies; i++) { // P
             float *fireflyMoveVector = new float[this->dimensionRange];
@@ -94,8 +100,8 @@ void FireflyAlgorithm::RunAlgorithm(int numberOfIterations, bool _debugMode) {
 
             UpdateFirefliesTemporaryTable(fireflyMoveVector, i);
             delete fireflyMoveVector;
-
         }
+    }
         SaveTemporaryFirefliesPosition();
     }
 

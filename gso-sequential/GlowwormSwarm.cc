@@ -2,6 +2,7 @@
 // Created by Konstantin on 08.12.2019.
 //
 
+#include <algorithm>
 #include "GlowwormSwarm.h"
 #include "Glowworm.h"
 

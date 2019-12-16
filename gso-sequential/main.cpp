@@ -8,7 +8,7 @@ using namespace std;
 
 inline float zad1(const gso::Position& pos) {
     float alpha = 0.0f, beta=1.0f;
-    for(int i = 0; i < pos.size(); i++) {
+    for(size_t i = 0; i < pos.size(); i++) {
         const float xi = pos[i];
         alpha += xi * xi;
         beta *= cos(xi / (i + 1));
@@ -17,8 +17,8 @@ inline float zad1(const gso::Position& pos) {
 }
 
 int main() {
-    gso::GlowwormSwarm swarm(zad1, 150, 100.0f, 200, 8);
-    swarm.runAlgorithm();
+    gso::GlowwormSwarm swarm(zad1, 100.0f, 8 * 15, 8);
+    swarm.runAlgorithm(150);
     gso::Position best = swarm.getBestWorm();
     return 0;
 }

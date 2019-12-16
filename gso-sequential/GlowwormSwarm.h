@@ -19,21 +19,24 @@ namespace gso {
         // members
         std::vector<Glowworm> population;
         Parameters parameters;
-
+        Random<float> random;
         // main steps
         void movePopulation(); // move glowworms
         void updateLuciferine(); // update luciferine
         void neighbourhoodRangeUpdate(Glowworm& worm, const size_t neighboursNumber);
 
+
+        // worm-only
+        std::vector<float> calculateProbabilities(const std::vector<Glowworm>);
         unsigned int selectWormFromProbability(const std::vector<double>& probabilities);
         void initializeAlgorithm();
     public:
-        void runAlgorithm();
-        Position getBestWorm();
+        void runAlgorithm(int t);
+        Position getBestWorm() const;
         GlowwormSwarm(
                 const std::function<float(const Position&)> &function,
-                unsigned int iterationNumber, float rs, size_t populationN, unsigned int dimensions
-        ) : parameters(function, iterationNumber, rs, populationN,dimensions) { }
+                float rs, size_t populationN, unsigned int dimensions
+        ) : parameters(function, rs, populationN,dimensions) { }
     };
 
 

@@ -19,14 +19,13 @@ namespace gso {
         Position position;
         float neighbourhoodRange;
         float luciferin;
-
         float distance(const Glowworm&) const;
         void moveTowardsWorm(const Glowworm&, float step);
 
-        void initializePosition(const size_t m);
+        void initializePosition(const size_t m, Random<float>&);
     public:
-        Glowworm(const size_t m, const float l0, const float rs) : luciferin(l0), neighbourhoodRange(rs) {
-            initializePosition(m);
+        Glowworm(const size_t m, const float l0, const float rs, Random<float>& random) : luciferin(l0), neighbourhoodRange(rs) {
+            initializePosition(m, random);
         }
     };
 

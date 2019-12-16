@@ -10,13 +10,15 @@
 namespace gso {
     template<typename T>
     class Random {
+     private:
+        std::mt19937 gen;
      public:
-        inline static T getFromRange(T l, T h) {
-            std::random_device rd; // TODO: make instance
-            std::mt19937 gen(rd());
+        Random() { std::random_device rd; gen = std::mt19937(rd());}
+        inline T getFromRange(T l, T h) {
             std::uniform_real_distribution<T> dis(l, h);
             return dis(gen);
         }
+
     };
 }
 

@@ -35,6 +35,10 @@ void gso::Glowworm::moveTowardsWorm(const gso::Glowworm& other, float step) {
 }
 
 void gso::Glowworm::initializePosition(const size_t m) {
+    //
+    int p = 0;
+    // -r, r : -r, 2r / p,
+
     for(size_t i = 0; i < m; i++) // TODO: change constraint
         position.push_back(Random<float>::getFromRange(-40.0f, 40.0f));
 

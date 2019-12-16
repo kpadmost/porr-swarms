@@ -16,7 +16,7 @@ void gso::GlowwormSwarm::updateLuciferine() {
 
 void gso::GlowwormSwarm::movePopulation() {
     // for each worm
-    for(auto worm = population.begin(); worm != population.end(); worm++) {
+    for(auto worm = population.begin(); worm != population.end(); worm++) { // P
         // determine neighbourhood
         std::vector<gso::Glowworm> neighbours;
 
@@ -54,6 +54,7 @@ unsigned int gso::GlowwormSwarm::selectWormFromProbability(const std::vector<dou
         accumulatedProbabilities[i] = accumulatedProbabilities[i - 1] + probabilities[i];
     // randomly select
     const double p = Random<double>::getFromRange(0.0, 1.0);
+
     // binary search
     int l = 0, h = accumulatedProbabilities.size() - 1, mid = (h + l) / 2;
     while(l <= h && h >= 0) {
@@ -73,7 +74,8 @@ void gso::GlowwormSwarm::runAlgorithm() {
     std::for_each(bp.begin(), bp.end(), [] (const auto &d) {std::cout << d << " ";});
     std::cout << std::endl;
     while(parameters.getT() < parameters.maxT) {
-        updateLuciferine();
+        updateLuciferine(); // P
+        //block
         movePopulation();
         parameters.updateT();
         auto bp = getBestWorm();
@@ -84,7 +86,7 @@ void gso::GlowwormSwarm::runAlgorithm() {
 
 }
 
-Position gso::GlowwormSwarm::getBestWorm() {
+gso::Position gso::GlowwormSwarm::getBestWorm() {
     // TODO : change to loop
     Glowworm g = population[0];
     for(auto i = population.begin(); i != population.end(); i++) {

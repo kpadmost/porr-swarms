@@ -13,6 +13,8 @@ FireflyAlgorithm::FireflyAlgorithm(const int numberOfFireflies, const int number
                                    const float attractivenessFactor, const float absorptionFactor)
         : parameters(numberOfFireflies, numberOfDimensions, dimensionRange, attractivenessFactor, absorptionFactor) {
     this->debugMode;
+    this->costFunctionFlag;
+
     InitializeFirefliesTable(this->firefliesTable, numberOfFireflies, numberOfDimensions);
     InitializeFirefliesTable(this->firefliesTableTemporary, numberOfFireflies, dimensionRange);
     GenerateRandomPositionsOfFireflies();
@@ -68,13 +70,24 @@ float FireflyAlgorithm::CountCostFunction(float* firefly){
     for(int i = 0; i < this->parameters.numberOfDimensions; i++){
         sigma += pow(firefly[i],2);
         pi *= cos(firefly[i]/(i+1));
-
     }
     return sigma/40 + 1 - pi;
 }
 
-void FireflyAlgorithm::RunAlgorithm(int numberOfIterations, bool _debugMode) {
+float FireflyAlgorithm::CountCostFunction2(float* firefly){
+    float sigma = 0.0f;
+
+    for(int i = 0; i < this->parameters.numberOfDimensions - 1; i++){
+        float a = pow((firefly[i+1] - pow(firefly[1], 2)), 2);
+        float b = pow((1 - firefly[i]), 2);
+        sigma += ((100 * a) + b);
+    }
+    return sigma;
+}
+
+void FireflyAlgorithm::RunAlgorithm(int numberOfIterations, bool _debugMode, bool _costFunctionFlag) {
     this->debugMode = _debugMode;
+    this->costFunctionFlag = _costFunctionFlag;
     srand(time(NULL));
     //float *fireflyMoveVector = new float[this->dimensionRange];
     for (int iterationNo = 0; iterationNo < numberOfIterations; iterationNo++) {
@@ -85,9 +98,14 @@ void FireflyAlgorithm::RunAlgorithm(int numberOfIterations, bool _debugMode) {
             float *fireflyMoveVector = new float[this->parameters.dimensionRange];
             //CleanUpFireflyMoveVector(fireflyMoveVector);
             for (int j = 0; j < parameters.numberOfFireflies; j++) {
-
-                if (CountCostFunction(this->firefliesTable[i]) > CountCostFunction(this->firefliesTable[j]))
-                    CalculateFireflyMoveVector(fireflyMoveVector, this->firefliesTable[i], this->firefliesTable[j]);
+                if(this->costFunctionFlag)
+                {
+                    if (CountCostFunction2(this->firefliesTable[i]) > CountCostFunction2(this->firefliesTable[j]))
+                                        CalculateFireflyMoveVector(fireflyMoveVector, this->firefliesTable[i], this->firefliesTable[j]);
+                } else {
+                    if (CountCostFunction(this->firefliesTable[i]) > CountCostFunction(this->firefliesTable[j]))
+                                        CalculateFireflyMoveVector(fireflyMoveVector, this->firefliesTable[i], this->firefliesTable[j]);
+                }
             }
 
             UpdateFirefliesTemporaryTable(fireflyMoveVector, i);

@@ -16,6 +16,7 @@ private:
     float** firefliesTableTemporary;    //copy of previous table, used in order to keep local changes of iteration before update whole table at once
 
     bool debugMode;                     //flag for displaying extra info for debugging purposes
+    bool costFunctionFlag;              //if false then CountCostFunction otherwise CountCostFunction2
 
     void InitializeFirefliesTable(float** & firefliesTable, int numberOfFireflies, int numberOfDimensions);
     void GenerateRandomPositionsOfFireflies();
@@ -23,6 +24,7 @@ private:
     void SaveTemporaryFirefliesPosition();
     void CopyToTemporaryFirefliesPositionTable();
     float CountCostFunction(float* firefly);
+    float CountCostFunction2(float* firefly);
     void CleanUpFireflyMoveVector(float* & fireflyMove);
     void CalculateFireflyMoveVector(float* & fireflyMoveVector, float* mainFirefly, float* secondFirefly);
     void UpdateFirefliesTemporaryTable(float* fireflyMoveVector, int fireflyNo);
@@ -32,7 +34,7 @@ public:
     FireflyAlgorithm(const int numberOfFireflies, const int numberOfDimensions, const int dimensionRange,
                      const float attractivenessFactor, const float absorptionFactor);
     ~FireflyAlgorithm();
-    void RunAlgorithm(int numberOfIterations, bool debugMode);
+    void RunAlgorithm(int numberOfIterations, bool debugMode, bool costFunctionFlag);
 
 
 };

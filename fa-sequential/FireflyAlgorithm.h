@@ -11,7 +11,7 @@
 class FireflyAlgorithm
 {
 private:
-    Parameters parameters;
+    Parameters parameters;              // algorithm parameters
     float** firefliesTable;             //two dimension table which stores data about current position of each firefly
     float** firefliesTableTemporary;    //copy of previous table, used in order to keep local changes of iteration before update whole table at once
 
@@ -29,7 +29,8 @@ private:
 
 
 public:
-    FireflyAlgorithm(int numberOfFireflies, int numberOfDimensions, int dimensionRange, float attractivenessFactor, float absorptionFactor);
+    FireflyAlgorithm(const int numberOfFireflies, const int numberOfDimensions, const int dimensionRange,
+                     const float attractivenessFactor, const float absorptionFactor);
     ~FireflyAlgorithm();
     void RunAlgorithm(int numberOfIterations, bool debugMode);
 

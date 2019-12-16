@@ -9,11 +9,12 @@
 #include <stdlib.h>
 #include "FireflyAlgorithm.h"
 
-FireflyAlgorithm::FireflyAlgorithm(int _numberOfFireflies, int _numberOfDimensions, int _dimensionRange, float _attractivenessFactor, float _absorptionFactor)
-        : parameters(_numberOfFireflies, _numberOfDimensions, _dimensionRange, _attractivenessFactor, _absorptionFactor) {
+FireflyAlgorithm::FireflyAlgorithm(const int numberOfFireflies, const int numberOfDimensions, const int dimensionRange,
+                                   const float attractivenessFactor, const float absorptionFactor)
+        : parameters(numberOfFireflies, numberOfDimensions, dimensionRange, attractivenessFactor, absorptionFactor) {
     this->debugMode;
-    InitializeFirefliesTable(this->firefliesTable, _numberOfFireflies, _numberOfDimensions);
-    InitializeFirefliesTable(this->firefliesTableTemporary, _numberOfFireflies, _dimensionRange);
+    InitializeFirefliesTable(this->firefliesTable, numberOfFireflies, numberOfDimensions);
+    InitializeFirefliesTable(this->firefliesTableTemporary, numberOfFireflies, dimensionRange);
     GenerateRandomPositionsOfFireflies();
     CopyToTemporaryFirefliesPositionTable();
 }
@@ -27,7 +28,7 @@ FireflyAlgorithm::~FireflyAlgorithm(){
     delete this->firefliesTableTemporary;
 }
 
-void FireflyAlgorithm::InitializeFirefliesTable(float** & _firefliesTable, int numberOfFireflies, int numberOfDimensions) {
+void FireflyAlgorithm::InitializeFirefliesTable(float** & _firefliesTable, const int numberOfFireflies, const int numberOfDimensions) {
     _firefliesTable = new float*[numberOfFireflies];
     for(int i = 0; i < numberOfFireflies; i++)
         _firefliesTable[i] = new float[numberOfDimensions];

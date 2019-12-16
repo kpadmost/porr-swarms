@@ -6,11 +6,12 @@ set(CMAKE_CXX_STANDARD 14)
 find_package(OpenMP)
 
 set(HEADERS
+        Parameters.hpp
         FireflyAlgorithm.h
-        )
+    )
 
 set(SOURCES
         FireflyAlgorithm.cpp
-        )
+    )
 
 add_executable(firefly_algorithm_omp ${HEADERS} ${SOURCES} main.cpp)

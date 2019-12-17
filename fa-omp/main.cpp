@@ -20,7 +20,7 @@ int main() {
 
     FireflyAlgorithm algorithm =  FireflyAlgorithm(numberOfFireflies, numberOfDimensions, dimensionRange,
                                                    attractivenessFactor, absorptionFactor);
-    algorithm.RunAlgorithm(NUMBER_OF_ITERATIONS, true);
+    algorithm.RunAlgorithm(NUMBER_OF_ITERATIONS, true, true);
 
     std::cout << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
 

@@ -77,18 +77,18 @@ float FireflyAlgorithm::CountCostFunction(float* firefly){
 }
 
 float FireflyAlgorithm::CountCostFunction2(float* firefly, float* d){
-    float sigma, sigma2 = 0.0f;
+    float sigma = 0.0f, sigma2 = 0.0f;
 
     for(int i = 0; i < this->parameters.numberOfDimensions; i++){
         sigma2 += pow((firefly[i] - i), 2);
     }
 
-    if(*d * (sigma2 - (this->parameters.numberOfDimensions * 10))) {
-        sigma += (*d * pow(max(sigma2 - (10 * this->parameters.numberOfDimensions),0.0f), 2));
+    if(sigma2 > this->parameters.numberOfDimensions * 10) {
+        sigma += *d * pow(sigma2 - (10 * this->parameters.numberOfDimensions), 2);
     }
 
     for(int i = 0; i < this->parameters.numberOfDimensions - 1; i++){
-        float a = pow((firefly[i+1] - pow(firefly[1], 2)), 2);
+        float a = pow((firefly[i+1] - pow(firefly[i], 2)), 2);
         float b = pow((1 - firefly[i]), 2);
         sigma += ((100 * a) + b);
     }

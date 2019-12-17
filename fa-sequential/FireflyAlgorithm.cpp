@@ -113,7 +113,7 @@ void FireflyAlgorithm::RunAlgorithm(int numberOfIterations, bool _debugMode, boo
                 {
                     if (CountCostFunction2(this->firefliesTable[i], &d) > CountCostFunction2(this->firefliesTable[j], &d))
                                         CalculateFireflyMoveVector(fireflyMoveVector, this->firefliesTable[i], this->firefliesTable[j]);
-                     d *= 10;
+                     d += 100;
                 } else {
                     if (CountCostFunction(this->firefliesTable[i]) > CountCostFunction(this->firefliesTable[j]))
                                         CalculateFireflyMoveVector(fireflyMoveVector, this->firefliesTable[i], this->firefliesTable[j]);
@@ -150,12 +150,22 @@ void FireflyAlgorithm::UpdateFirefliesTemporaryTable(float* fireflyMoveVector, i
             std::cout << "Firefly no. " << fireflyNo << " moves in dimension no. " << dimension << " from " <<  firefliesTableTemporary[fireflyNo][dimension] << " to ";
 
         previewValue = firefliesTableTemporary[fireflyNo][dimension] + fireflyMoveVector[dimension];
-        if(previewValue > 40.0f)
-            firefliesTableTemporary[fireflyNo][dimension] = 40.0f - (previewValue - 40.0f);
-        else if(previewValue < -40.0f)
-            firefliesTableTemporary[fireflyNo][dimension] = -40.0f - (previewValue + 40.0f);
-        else
-            firefliesTableTemporary[fireflyNo][dimension] = previewValue;
+        if(this->costFunctionFlag)
+        {
+          if(previewValue > 40.0f)
+              firefliesTableTemporary[fireflyNo][dimension] = 40.0f;
+          else if(previewValue < -40.0f)
+              firefliesTableTemporary[fireflyNo][dimension] = -40.0f;
+          else
+              firefliesTableTemporary[fireflyNo][dimension] = previewValue;
+        } else {
+           if(previewValue > 40.0f)
+               firefliesTableTemporary[fireflyNo][dimension] = 40.0f - (previewValue - 40.0f);
+           else if(previewValue < -40.0f)
+               firefliesTableTemporary[fireflyNo][dimension] = -40.0f - (previewValue + 40.0f);
+           else
+               firefliesTableTemporary[fireflyNo][dimension] = previewValue;
+        }
 
         if(this->debugMode)
             std::cout << firefliesTableTemporary[fireflyNo][dimension] << std::endl;

@@ -24,7 +24,7 @@ private:
     void SaveTemporaryFirefliesPosition();
     void CopyToTemporaryFirefliesPositionTable();
     float CountCostFunction(float* firefly);
-    float CountCostFunction2(float* firefly);
+    float CountCostFunction2(float* firefly, float* d);
     void CleanUpFireflyMoveVector(float* & fireflyMove);
     void CalculateFireflyMoveVector(float* & fireflyMoveVector, float* mainFirefly, float* secondFirefly);
     void UpdateFirefliesTemporaryTable(float* fireflyMoveVector, int fireflyNo);

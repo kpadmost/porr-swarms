@@ -11,6 +11,10 @@
 
 using namespace std;
 
+#ifndef  __MINGW32__
+#define M_E	2.71828182845904523536
+#endif
+
 FireflyAlgorithm::FireflyAlgorithm(const int numberOfFireflies, const int numberOfDimensions, const int dimensionRange,
                                    const float attractivenessFactor, const float absorptionFactor)
         : parameters(numberOfFireflies, numberOfDimensions, dimensionRange, attractivenessFactor, absorptionFactor) {
@@ -82,7 +86,7 @@ float FireflyAlgorithm::CountCostFunction2(float* firefly, float* d){
     float sigma = 0.0f, sigma2 = 0.0f;
 
     for(int i = 0; i < this->parameters.numberOfDimensions; i++){
-        sigma2 += pow((firefly[i] - i), 2);
+        sigma2 += pow((firefly[i] - (i + 1)), 2);
     }
 
     if(sigma2 > this->parameters.numberOfDimensions * 10) {

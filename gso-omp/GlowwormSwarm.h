@@ -22,7 +22,7 @@ namespace gso {
         Parameters parameters;
         Random<float> random;
         // restriction function
-        double p = 1;
+        float p = 1;
 
         // main steps
         void movePopulation(); // move glowworms
@@ -38,7 +38,7 @@ namespace gso {
         void runAlgorithm(int t);
         Position getBestWorm() const;
         GlowwormSwarm(
-                const std::function<float(const Position&, const double)> &function,
+                const std::function<float(const Position&, const float)> &function,
                 float rs, size_t populationN, unsigned int dimensions
         ) : parameters(function, rs, populationN,dimensions) { }
     };

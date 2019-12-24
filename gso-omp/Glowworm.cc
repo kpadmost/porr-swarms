@@ -30,7 +30,14 @@ void gso::Glowworm::moveTowardsWorm(const gso::Glowworm& other, float step) {
     norm = sqrt(norm);
     // adjust position
     for(size_t i = 0; i < size; i++) {
-        position[i] = position[i] +  (step / norm) * result[i];
+        const float resultPosition = position[i] +  (step / norm) * result[i];
+        if(resultPosition > 40.0f)
+            position[i] = 40.0f;
+        else if(resultPosition < -40.0f)
+            position[i] = -40.0f;
+        else
+            position[i] = resultPosition;
+
     }
 }
 

@@ -18,6 +18,7 @@ private:
     bool debugMode;                     //flag for displaying extra info for debugging purposes
     bool costFunctionFlag;              //if false then CountCostFunction otherwise CountCostFunction2
 
+    void printCost();
     void InitializeFirefliesTable(float** & firefliesTable, int numberOfFireflies, int numberOfDimensions);
     void GenerateRandomPositionsOfFireflies();
     void PrintCurrentPositionsOfFireflies();
@@ -26,7 +27,7 @@ private:
     float CountCostFunction(float* firefly);
     float CountCostFunction2(float* firefly, float* d);
     void CleanUpFireflyMoveVector(float* & fireflyMove);
-    void CalculateFireflyMoveVector(float* & fireflyMoveVector, float* mainFirefly, float* secondFirefly);
+    void CalculateFireflyMoveVector(float* fireflyMoveVector, float* mainFirefly, float* secondFirefly);
     void UpdateFirefliesTemporaryTable(float* fireflyMoveVector, int fireflyNo);
 
 

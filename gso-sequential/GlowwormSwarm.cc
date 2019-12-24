@@ -9,7 +9,7 @@
 void gso::GlowwormSwarm::updateLuciferine() {
     const float ro = parameters.ro;
     const float gamma = parameters.gamma;
-    const auto costFunction = parameters.consFunction;
+    const auto costFunction = parameters.costFunction;
     for(auto a = population.begin(); a != population.end(); a++) {
         a->luciferin = (1 - ro) * a->luciferin - gamma * costFunction(a->position);
     }
@@ -74,7 +74,7 @@ unsigned int gso::GlowwormSwarm::selectWormFromProbability(const std::vector<dou
 void gso::GlowwormSwarm::runAlgorithm(int t) {
     initializeAlgorithm();
     auto bp = getBestWorm();
-    std::cout << "Iteration " << 0 << " cf " << parameters.consFunction(bp) << std::endl;
+    std::cout << "Iteration " << 0 << " cf " << parameters.costFunction(bp) << std::endl;
     std::for_each(bp.begin(), bp.end(), [] (const auto &d) {std::cout << d << " ";});
     std::cout << std::endl;
 
@@ -84,7 +84,7 @@ void gso::GlowwormSwarm::runAlgorithm(int t) {
         movePopulation();
 
         auto bp = getBestWorm();
-        std::cout << "Iteration " << i << " cf " << parameters.consFunction(bp) << " ";
+        std::cout << "Iteration " << i << " cf " << parameters.costFunction(bp) << " ";
         std::for_each(bp.begin(), bp.end(), [] (const auto &d) {std::cout << d << " ";});
         std::cout << std::endl;
     }
@@ -92,11 +92,10 @@ void gso::GlowwormSwarm::runAlgorithm(int t) {
 }
 
 gso::Position gso::GlowwormSwarm::getBestWorm() const {
-    // TODO : change to loop
     gso::Glowworm g = population[0];
     for(size_t i = 1; i < population.size(); i++) {
         const Glowworm other = population[i];
-        if(parameters.consFunction(other.position) < parameters.consFunction(g.position))
+        if(parameters.costFunction(other.position) < parameters.costFunction(g.position))
             g = other;
     }
     return g.position;

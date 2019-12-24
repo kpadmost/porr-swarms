@@ -7,6 +7,7 @@
 namespace gso {
 
     typedef std::vector<float> Position;
+    typedef std::function<float(const Position &, const float)> CostFunction;
     class Parameters { // algorithm parameters
      public:
         //
@@ -21,20 +22,20 @@ namespace gso {
         const float gamma = 0.6f;
         const float beta = 0.08f;
 
-        const std::function<float(const Position &, const double)> consFunction;
+        const std::function<float(const Position &, const float)> costFunction;
 
-        Parameters(const std::function<float(const Position &, const double)> &consFunction, float rs,
+        Parameters(const std::function<float(const Position &, const float)> &consFunction, float rs,
                    const size_t populationNumber, unsigned int dimensions,
                    const float ro, const float gamma, const float beta, const float s, const int neighbours,
                    const float l0
-        ) : ro(ro), gamma(gamma), beta(beta), nt(neighbours), l0(l0), consFunction(consFunction), s(s),
+        ) : ro(ro), gamma(gamma), beta(beta), nt(neighbours), l0(l0), costFunction(consFunction), s(s),
             rs(rs), populationNumber(populationNumber), dimensions(dimensions) {}
 
         Parameters(
-                const std::function<float(const Position &, const double)> &consFunction, float rs,
+                const std::function<float(const Position &, const float)> &consFunction, float rs,
                 size_t populationNumber, unsigned int dimensions
         ) // parameters from paper
-                : consFunction(consFunction), rs(rs), populationNumber(populationNumber), dimensions(dimensions) {}
+                : costFunction(consFunction), rs(rs), populationNumber(populationNumber), dimensions(dimensions) {}
     };
 }
 #endif

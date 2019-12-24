@@ -9,7 +9,7 @@
 void gso::GlowwormSwarm::updateLuciferine() {
     const float ro = parameters.ro;
     const float gamma = parameters.gamma;
-    const auto costFunction = parameters.consFunction;
+    const auto costFunction = parameters.costFunction;
     const int size = population.size();
     #pragma omp parallel for
     for(int i = 0; i < size; i++) {
@@ -79,15 +79,15 @@ unsigned int gso::GlowwormSwarm::selectWormFromProbability(const std::vector<dou
 void gso::GlowwormSwarm::runAlgorithm(int t) {
     initializeAlgorithm();
     auto bp = getBestWorm();
-    std::cout << "Iteration " << 0 << " cf " << parameters.consFunction(bp, p) << std::endl;
+//    std::cout << "Iteration " << 0 << " cf " << parameters.costFunction(bp, p) << std::endl;
     for(int i = 0; i < t; i++) {
         updateLuciferine(); // run in parallel for population
         //block
         movePopulation(); // run in parallel for population
         //block
         bp = getBestWorm();
-        std::cout << "Iteration " << i << " p " << p << " cf " << parameters.consFunction(bp, p) << std::endl;
-        p *= 10;
+  //    std::cout << "Iteration " << i << " p " << p << " cf " << parameters.costFunction(bp, p) << std::endl;
+        p = p + 100;
     }
 
 
@@ -98,7 +98,7 @@ gso::Position gso::GlowwormSwarm::getBestWorm() const {
     gso::Glowworm g = population[0];
     for(size_t i = 1; i < population.size(); i++) {
         const Glowworm other = population[i];
-        if(parameters.consFunction(other.position, p) < parameters.consFunction(g.position, p))
+        if(parameters.costFunction(other.position, p) < parameters.costFunction(g.position, p))
             g = other;
     }
     return g.position;
@@ -118,7 +118,7 @@ void gso::GlowwormSwarm::initializeAlgorithm() {
     const auto rs = parameters.rs;
     for(size_t i = 0; i < parameters.populationNumber; i++) {
         //TODO change constraint
-        population.emplace_back(Glowworm(m, l0, rs, random));
+        population.emplace_back(m, l0, rs, random);
     }
 
 }

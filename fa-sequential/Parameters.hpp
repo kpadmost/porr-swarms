@@ -16,7 +16,7 @@ public:
 
 
     Parameters(const int numberOfFireflies, const int numberOfDimensions, const int dimensionRange,
-               const int attractivenessFactor, const int absorptionFactor
+               const float attractivenessFactor, const float absorptionFactor
     ) : numberOfFireflies(numberOfFireflies), numberOfDimensions(numberOfDimensions),  dimensionRange(dimensionRange),
         attractivenessFactor(attractivenessFactor), absorptionFactor(absorptionFactor) {}
 };

@@ -10,9 +10,9 @@
 namespace gso {
     template<typename T>
     class Random {
-     private:
+    private:
         std::mt19937 gen;
-     public:
+    public:
         Random() { std::random_device rd; gen = std::mt19937(rd());}
         inline T getFromRange(T l, T h) {
             std::uniform_real_distribution<T> dis(l, h);

@@ -2,8 +2,8 @@
 // Created by Komorowski on 16.12.2019.
 //
 
-#ifndef PORR_SWARMS_FIREFLYALGORITHM_OMP_PARAMETERS
-#define PORR_SWARMS_FIREFLYALGORITHM_OMP_PARAMETERS
+#ifndef PORR_SWARMS_FIREFLYALGORITHM_PARAMETERS
+#define PORR_SWARMS_FIREFLYALGORITHM_PARAMETERS
 
 
 class Parameters {
@@ -16,9 +16,9 @@ public:
 
 
     Parameters(const int numberOfFireflies, const int numberOfDimensions, const int dimensionRange,
-               const int attractivenessFactor, const int absorptionFactor
+               const float attractivenessFactor, const float absorptionFactor
     ) : numberOfFireflies(numberOfFireflies), numberOfDimensions(numberOfDimensions),  dimensionRange(dimensionRange),
         attractivenessFactor(attractivenessFactor), absorptionFactor(absorptionFactor) {}
 };
 
-#endif // PORR_SWARMS_FIREFLYALGORITHM_OMP_PARAMETERS
+#endif

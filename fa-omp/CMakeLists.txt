@@ -15,3 +15,4 @@ set(SOURCES
 add_executable(firefly_algorithm_omp ${HEADERS} ${SOURCES} main.cpp)
 
 find_package(OpenMP)
+target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)

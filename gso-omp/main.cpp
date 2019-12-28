@@ -5,6 +5,7 @@
 #include <numeric>
 
 #include <ctime>
+#include <algorithm>
 
 #include "GlowwormSwarm.h"
 
@@ -32,7 +33,7 @@ float zad2(const gso::Position& pos, const float p) {
         beta += std::pow(1.0f - pos[i], 2);
         penalty += std::pow(pos[i] - i - 1.0f, 2);
     }
-    std::cout << "a " << alpha << " b "<< beta  << " p " << penalty << std::endl;
+    //std::cout << "a " << alpha << " b "<< beta  << " p " << penalty << std::endl;
     return 100 * alpha + beta + p * std::pow(std::fmax(0.0f, penalty - size * 10), 2);
 }
 
@@ -51,18 +52,18 @@ void test(const unsigned int dim, const int iternum, const int population, const
         best_results[i] = funck(swarm.getBestWorm(), 0.0f);
         std::cout << " " << i;
     }
-    std::cout << std::endl;
+   /* std::cout << std::endl;
     for(int i = 0; i < simulation_number; i++) {
         std::cout << best_results[i] << ", " << times[i] << std::endl;
-    }
+    }*/
 
     // sort results
-    std::sort(best_results.begin(), best_results.end());
+    /*std::sort(best_results.begin(), best_results.end());
     std::cout << "f " << best_results[0] << ", "
                << best_results[simulation_number / 2] << ", " << best_results[simulation_number - 1] << std::endl;
     std::sort(times.begin(), times.end());
     std::cout << "t " << times[0] << ", "
-              << times[simulation_number / 2] << ", " << times[simulation_number - 1] << std::endl;
+              << times[simulation_number / 2] << ", " << times[simulation_number - 1] << std::endl;*/
 
 }
 
@@ -95,12 +96,23 @@ int main() {
 //    allTests();
     omp_set_num_threads(8);
 
-    gso::GlowwormSwarm swarm(zad2, dim * r1, 8 * 7, dim);
+    gso::GlowwormSwarm swarm(zad1, dim * r1, 8 * 7, dim);
     const clock_t begin_time = clock();
     swarm.runAlgorithm(iternum);
-    std::cout << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
+    std::cout << "Task no. 1 execution time: " << float( clock () - begin_time ) /  CLOCKS_PER_SEC << endl;
     gso::Position best = swarm.getBestWorm();
-    std::cout << endl << "res " << zad2(best, 1 + 100 * iternum);
-    std::cout << endl << "res " << zad2(best, 0);
+    //std::cout << endl << "res " << zad1(best, 1 + 100 * iternum);
+    //std::cout << endl << "res " << zad1(best, 0);
+
+
+
+
+    gso::GlowwormSwarm swarm2(zad2, dim * r1, 8 * 7, dim);
+    const clock_t begin_time2 = clock();
+    swarm.runAlgorithm(iternum);
+    std::cout << "Task no. 2 execution time: " << float( clock () - begin_time ) /  CLOCKS_PER_SEC << endl;
+    gso::Position best2 = swarm.getBestWorm();
+    //std::cout << endl << "res " << zad2(best, 1 + 100 * iternum);
+    //std::cout << endl << "res " << zad2(best, 0);
     return 0;
 }

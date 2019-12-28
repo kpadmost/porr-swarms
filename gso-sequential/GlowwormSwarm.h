@@ -8,6 +8,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <omp.h>
 
 #include "Random.hpp"
 #include "Glowworm.h"
@@ -20,6 +21,9 @@ namespace gso {
         std::vector<Glowworm> population;
         Parameters parameters;
         Random<float> random;
+        // restriction function
+        float p = 1;
+
         // main steps
         void movePopulation(); // move glowworms
         void updateLuciferine(); // update luciferine
@@ -27,14 +31,14 @@ namespace gso {
 
 
         // worm-only
-        std::vector<float> calculateProbabilities(const std::vector<Glowworm>);
+
         unsigned int selectWormFromProbability(const std::vector<double>& probabilities);
         void initializeAlgorithm();
     public:
         void runAlgorithm(int t);
         Position getBestWorm() const;
         GlowwormSwarm(
-                const std::function<float(const Position&)> &function,
+                const std::function<float(const Position&, const float)> &function,
                 float rs, size_t populationN, unsigned int dimensions
         ) : parameters(function, rs, populationN,dimensions) { }
     };

@@ -15,6 +15,4 @@ set(SOURCES
         Parameters.hpp
         )
 
-
-
-add_executable(glowworm_swarms ${HEADERS} ${SOURCES} main.cpp)
+add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} main.cpp)

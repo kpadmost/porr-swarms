@@ -8,6 +8,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <algorithm>
+#include <omp.h>
 #include "FireflyAlgorithm.h"
 
 #ifndef  __MINGW32__
@@ -98,7 +99,7 @@ float FireflyAlgorithm::CountCostFunction2(float* firefly, float* d){
         //cout << "a " << a << " b " << b << endl;
         sigma += ((100 * a) + b);
     }
-   // cout << "sig " << sigma << endl;
+    // cout << "sig " << sigma << endl;
     return sigma;
 }
 
@@ -107,6 +108,19 @@ void FireflyAlgorithm::RunAlgorithm(int numberOfIterations, bool _debugMode, boo
     this->costFunctionFlag = _costFunctionFlag;
     float d = 10.0f; // parameter for cost function 2
     srand(time(NULL));
+
+    //Checking cost function values before algorithm's run
+    if(this->debugMode) {
+        std::cout << "Cost function values at the beginning of algorithm"<< std::endl;
+        for (int i = 0; i < parameters.numberOfFireflies; i++) {
+            std::cout << CountCostFunction(firefliesTable[i]) << " " << std::endl;
+            std::cout << CountCostFunction2(firefliesTable[i], &d) << " " << std::endl;
+        }
+        cout << endl;
+    }
+
+
+
     //float *fireflyMoveVector = new float[this->dimensionRange];
     for (int iterationNo = 0; iterationNo < numberOfIterations; iterationNo++) {
         if(this->debugMode)
@@ -116,17 +130,17 @@ void FireflyAlgorithm::RunAlgorithm(int numberOfIterations, bool _debugMode, boo
             float *fireflyMoveVector = new float[this->parameters.numberOfDimensions];
             for(int j = 0; j < parameters.numberOfDimensions; j++)
                 fireflyMoveVector[j] = this->firefliesTable[i][j];
-           // cout << endl;
+
             //CleanUpFireflyMoveVector(fireflyMoveVector);
             for (int j = 0; j < parameters.numberOfFireflies; j++) {
                 if(this->costFunctionFlag)
                 {
                     if (CountCostFunction2(fireflyMoveVector, &d) > CountCostFunction2(this->firefliesTable[j], &d))
-                                        CalculateFireflyMoveVector(fireflyMoveVector, this->firefliesTable[i], this->firefliesTable[j]);
-                     d += 100;
+                        CalculateFireflyMoveVector(fireflyMoveVector, this->firefliesTable[i], this->firefliesTable[j]);
+                    d += 100;
                 } else {
                     if (CountCostFunction(fireflyMoveVector) > CountCostFunction(this->firefliesTable[j]))
-                                        CalculateFireflyMoveVector(fireflyMoveVector, this->firefliesTable[i], this->firefliesTable[j]);
+                        CalculateFireflyMoveVector(fireflyMoveVector, this->firefliesTable[i], this->firefliesTable[j]);
                 }
             }
 
@@ -135,14 +149,18 @@ void FireflyAlgorithm::RunAlgorithm(int numberOfIterations, bool _debugMode, boo
 
 
         }
-        cout << "cost f at " << iterationNo << " ";
-        for(int i = 0; i < parameters.numberOfFireflies; i++) {
-            std::cout << CountCostFunction2(firefliesTable[i], &d) << " ";
-        }
-        cout << endl;
         SaveTemporaryFirefliesPosition();
     }
 
+    //Checking cost function values after algorithm's run
+    if(this->debugMode) {
+        std::cout << "Cost function values at the end of algorithm"<< std::endl;
+        for (int i = 0; i < parameters.numberOfFireflies; i++) {
+            std::cout << CountCostFunction(firefliesTable[i]) << " " << std::endl;
+            std::cout << CountCostFunction2(firefliesTable[i], &d) << " " << std::endl;
+        }
+        cout << endl;
+    }
     //delete fireflyMoveVector;
 }
 
@@ -164,7 +182,7 @@ void FireflyAlgorithm::CalculateFireflyMoveVector(float* fireflyMoveVector, floa
     for (int dimension = 0; dimension < this->parameters.numberOfDimensions; dimension++) {
         float randomValue = ((float)(2*rand() - (RAND_MAX)) /  RAND_MAX);
         fireflyMoveVector[dimension] = fireflyMoveVector[dimension]+ randomValue +  this->parameters.attractivenessFactor *
-                                                      pow(M_E, -(this->parameters.absorptionFactor*dist)) * (secondFirefly[dimension] - fireflyMoveVector[dimension]);
+                                                                                    pow(M_E, -(this->parameters.absorptionFactor*dist)) * (secondFirefly[dimension] - fireflyMoveVector[dimension]);
     }
 }
 
@@ -174,23 +192,23 @@ void FireflyAlgorithm::UpdateFirefliesTemporaryTable(float* fireflyMoveVector, i
         if(this->debugMode)
             std::cout << "Firefly no. " << fireflyNo << " moves in dimension no. " << dimension << " from " <<  firefliesTableTemporary[fireflyNo][dimension] << " to ";
 
-       // previewValue = firefliesTableTemporary[fireflyNo][dimension] + fireflyMoveVector[dimension];
+        // previewValue = firefliesTableTemporary[fireflyNo][dimension] + fireflyMoveVector[dimension];
         previewValue = fireflyMoveVector[dimension];
         if(this->costFunctionFlag)
         {
-          if(previewValue > 40.0f)
-              firefliesTableTemporary[fireflyNo][dimension] = 40.0f;
-          else if(previewValue < -40.0f)
-              firefliesTableTemporary[fireflyNo][dimension] = -40.0f;
-          else
-              firefliesTableTemporary[fireflyNo][dimension] = previewValue;
+            if(previewValue > 40.0f)
+                firefliesTableTemporary[fireflyNo][dimension] = 40.0f;
+            else if(previewValue < -40.0f)
+                firefliesTableTemporary[fireflyNo][dimension] = -40.0f;
+            else
+                firefliesTableTemporary[fireflyNo][dimension] = previewValue;
         } else {
-           if(previewValue > 40.0f)
-               firefliesTableTemporary[fireflyNo][dimension] = 40.0f - (previewValue - 40.0f);
-           else if(previewValue < -40.0f)
-               firefliesTableTemporary[fireflyNo][dimension] = -40.0f - (previewValue + 40.0f);
-           else
-               firefliesTableTemporary[fireflyNo][dimension] = previewValue;
+            if(previewValue > 40.0f)
+                firefliesTableTemporary[fireflyNo][dimension] = 40.0f - (previewValue - 40.0f);
+            else if(previewValue < -40.0f)
+                firefliesTableTemporary[fireflyNo][dimension] = -40.0f - (previewValue + 40.0f);
+            else
+                firefliesTableTemporary[fireflyNo][dimension] = previewValue;
         }
 
         if(this->debugMode)

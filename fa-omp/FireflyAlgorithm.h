@@ -7,6 +7,7 @@
 
 
 #include "Parameters.hpp"
+#include "Random.hpp"
 
 class FireflyAlgorithm
 {
@@ -17,6 +18,8 @@ private:
 
     bool debugMode;                     //flag for displaying extra info for debugging purposes
     bool costFunctionFlag;              //if false then (Task 1) CountCostFunction otherwise CountCostFunction2 (Task 2)
+
+    gso::Random<float> random;
 
     void printCost();
     void InitializeFirefliesTable(float** & firefliesTable, int numberOfFireflies, int numberOfDimensions);

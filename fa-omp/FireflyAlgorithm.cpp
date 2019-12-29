@@ -48,7 +48,7 @@ void FireflyAlgorithm::InitializeFirefliesTable(float** & _firefliesTable, const
 void FireflyAlgorithm::GenerateRandomPositionsOfFireflies() {
     for(int i = 0; i < this->parameters.numberOfFireflies; i++)  // P
         for(int j = 0; j < this->parameters.numberOfDimensions; j++){
-            this->firefliesTable[i][j] = ((float)rand() / RAND_MAX) * 2.0f * this->parameters.dimensionRange - 40.0f;
+            this->firefliesTable[i][j] = random.getFromRange(-40.0, 40.0); //((float)rand() / RAND_MAX) * 2.0f * this->parameters.dimensionRange - 40.0f;
         }
 }
 
@@ -183,7 +183,7 @@ void FireflyAlgorithm::CalculateFireflyMoveVector(float* fireflyMoveVector, floa
     }
 
     for (int dimension = 0; dimension < this->parameters.numberOfDimensions; dimension++) {
-        float randomValue = ((float)(2*rand() - (RAND_MAX)) /  RAND_MAX);
+        float randomValue = random.getFromRange(-1.0, 1.0); //((float)(2*rand() - (RAND_MAX)) /  RAND_MAX);
         fireflyMoveVector[dimension] = fireflyMoveVector[dimension]+ randomValue +  this->parameters.attractivenessFactor *
                                                                                     pow(M_E, -(this->parameters.absorptionFactor*dist)) * (secondFirefly[dimension] - fireflyMoveVector[dimension]);
     }

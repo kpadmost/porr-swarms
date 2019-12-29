@@ -11,12 +11,12 @@ int main() {
 
 
     omp_set_dynamic(0);
-    omp_set_num_threads(8);
+    omp_set_num_threads(1);
 
     const clock_t begin_time = clock();
 
     //define parameters
-    const int numberOfFireflies = 8;//5;
+    const int numberOfFireflies = 12;//5;
     const int numberOfDimensions = 20;//3;
     const int dimensionRange = 40;
     const float attractivenessFactor = 1.0f; // attractivityFactor (recommended values: 0.5 - 4)

@@ -3,7 +3,6 @@ project(porr_swarms)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_subdirectory(fa-cuda)
 add_subdirectory(gso-sequential)
 add_subdirectory(fa-sequential)
 add_subdirectory(fa-omp)

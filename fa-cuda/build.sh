@@ -1,0 +1,1 @@
+nvcc -std=c++11 -D_MWAITXINTRIN_H_INCLUDED main.cu FireflyAlgorithm.cu -o firefly_algorithm_cuda

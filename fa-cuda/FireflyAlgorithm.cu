@@ -11,11 +11,36 @@
 #include <omp.h>
 #include "FireflyAlgorithm.h"
 
+#include <stdio.h>
+#include <assert.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
+
 #ifndef  __MINGW32__
 #define M_E	2.71828182845904523536
 #endif
 
 using namespace std;
+
+// this function can be use in debugging
+/*#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+inline void gpuAssert(cudaError_t code, char *file, int line, bool abort=true)
+{
+   if (code != cudaSuccess)
+   {
+      fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+      if (abort) exit(code);
+   }
+}*/
+
+__global__ void cost1(float *d_sigma2, float *d_pi2, int *d_numberOfDimensions, float *d_firefliesTable)
+{
+   for(int i = 0; i < *d_numberOfDimensions; i++){
+       *d_sigma2 += pow(d_firefliesTable[i],2);
+       *d_pi2 *= cos(d_firefliesTable[i]/(i+1));
+   }
+   *d_sigma2 = *d_sigma2/40 + 1 - d_pi2;
+}
 
 FireflyAlgorithm::FireflyAlgorithm(const int numberOfFireflies, const int numberOfDimensions, const int dimensionRange,
                                    const float attractivenessFactor, const float absorptionFactor)
@@ -73,13 +98,49 @@ void FireflyAlgorithm::PrintCurrentPositionsOfFireflies() {
 }
 
 float FireflyAlgorithm::CountCostFunction(float* firefly){
+    const clock_t begin_time = clock();
     float sigma = 0.0f, pi = 1.0f;
 
     for(int i = 0; i < this->parameters.numberOfDimensions; i++){
         sigma += pow(firefly[i],2);
         pi *= cos(firefly[i]/(i+1));
     }
-    return sigma/40 + 1 - pi;
+    sigma = sigma/40 + 1 - pi;
+
+    std::cout << "Cost execution time: " << float( clock () - begin_time ) /  CLOCKS_PER_SEC << std::endl;
+    std::cout << "COSTS: "<< sigma << std::endl;
+    const clock_t begin_time2 = clock();
+
+    float sigma2 = 0.0f, pi2 = 1.0f;
+    float *d_sigma2, *d_pi2, *d_firefliesTable;
+    int *d_numberOfDimensions;
+
+    int float_size = sizeof(float);
+    int int_size = sizeof(int);
+
+    cudaMalloc((void **)&d_sigma2, float_size);
+    cudaMalloc((void **)&d_pi2, float_size);
+    cudaMalloc((void **)&d_numberOfDimensions, int_size);
+    cudaMalloc((void **)&d_firefliesTable, float_size*this->parameters.numberOfDimensions);
+
+    cudaMemcpy(d_sigma2, &sigma2, float_size, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_pi2, &pi2, float_size, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_numberOfDimensions, &this->parameters.numberOfDimensions, int_size, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_firefliesTable, firefly, float_size * this->parameters.numberOfDimensions, cudaMemcpyHostToDevice);
+
+    cost1<<<256,16>>>(d_sigma2, d_pi2, d_numberOfDimensions, d_firefliesTable);
+    cudaDeviceSynchronize();
+
+    // Kopiowanie rezultatu obliczeń do pamięci hosta
+    cudaMemcpy(&sigma2, d_sigma2, float_size, cudaMemcpyDeviceToHost);
+
+    // Zwalnianie pamięci
+    cudaFree(d_sigma2); cudaFree(d_pi2);cudaFree(d_numberOfDimensions); cudaFree(d_firefliesTable);
+
+    std::cout << "Cost CUDE execution time: " << float( clock () - begin_time2 ) /  CLOCKS_PER_SEC << std::endl;
+    std::cout << "COSTS: "<< sigma2 << "    firefly[1], firefly[2]" << firefly[1] << " " << firefly[2] << std::endl;
+
+    return sigma2;
 }
 
 float FireflyAlgorithm::CountCostFunction2(float* firefly, float* d){
